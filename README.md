@@ -1,1 +1,1 @@
-# Validator
+Welcome to the "Validator" project.
