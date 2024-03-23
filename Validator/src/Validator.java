@@ -13,8 +13,8 @@ public class Validator {
 		System.out.println(fetchAfterAt("username@domain.com"));
 		System.out.println(isPrefix("you_!9850348me"));
 		System.out.println(isDomain("gmail.com"));
-		System.out.println(isDomain(".com"));
-
+		System.out.println("email" + isEmail("user.name@fake-m.ail.com"));
+	
 		
 	}
 	
@@ -97,25 +97,27 @@ public class Validator {
 	
 	// isDomain()
 	public static boolean isDomain(String domain) {
-		// Split the String into two portions separated by a period
-		String[] parts = domain.split("\\.");
-		if (parts.length < 2) {
-			return false;
-		}
 		
-		String part1 = "";
-		for (int i=0; i < parts.length-1;i++) {
-			part1 += parts[i];
-		}
+		// Determine the index of the last dot
+		int lastIndex = domain.lastIndexOf('.');
+		
+		// The String has to contain a dot
+		// First character has to be alphanumeric
+		// Last character has to be a letter
+        if (lastIndex == -1 || !isAlphaNum(domain.charAt(0))|| !Character.isLetter(domain.charAt(domain.length()-1))) {
+        	return false;
+        }
+        
+        // Split the string into two parts
+        String part1 = domain.substring(0, lastIndex);
+        String part2 = domain.substring(lastIndex + 1);
+      
 		int length1 = part1.length();
-
-		String part2 = parts[parts.length-1];
 		int length2 = part2.length();
-		System.out.println("length" + length1 + " " + length2);
 		
 		// Second portion contains at least two characters
-		// First portion must start and end with an alphanumeric character
-		if ( length2 < 2 || length1 == 0 || !isAlphaNum(domain.charAt(0)) || !isAlphaNum(part1.charAt(length1-1))  ) {
+		// First portion must end with an alphanumeric character
+		if ( length2 < 2 || !isAlphaNum(part1.charAt(length1-1))  ) {
 			return false;
 		}
 					
@@ -130,7 +132,6 @@ public class Validator {
 		return false;
 		}
 		
-		
 		for (int i=1; i<length1-1; i++) {
 			// First portion contains only alphanumeric characters, periods, and dashes.
 			if ( !isDomainChar (part1.charAt(i))) {
@@ -144,7 +145,18 @@ public class Validator {
 		return true;
 	}
 
-	
+	// isEmail
+		public static boolean isEmail (String email) {
+			if (!singleAtSign(email)) {
+				return false;
+			}
+			String prefix = fetchBeforeAt(email);
+			String domain = fetchAfterAt(email);
+			if (!isPrefix(prefix) || !isDomain(domain)) {
+				return false;
+			}
+			return true;
+		}
 	
 	
 }
