@@ -12,7 +12,7 @@ public class Validator {
 		System.out.println(fetchBeforeAt("username@domain.com"));
 		System.out.println(fetchAfterAt("username@domain.com"));
 		System.out.println(isPrefix("you_!9850348me"));
-		System.out.println(isDomain("ac-133.yul"));
+		System.out.println(isDomain("833guiif_34"));
 	}
 	
 	// isAlphaNum() to check if a character is alphanumeric
@@ -130,10 +130,13 @@ public class Validator {
 	    }
 
 	    // Check second portion
-	    if (secondPortion.length() < 2 || !secondPortion.chars().allMatch(Character::isLetter)) {
+	    if (secondPortion.length() < 2 ) {
 	        return false; // Second portion must have at least two characters and contain only letters of the alphabet
+	    } else {
+	    	for (int i = 0; i < secondPortion.length(); i++) {
+	    		if (!isAlphaNum(secondPortion.charAt(i))) return false;
+	    	}
 	    }
-
 		
 		return true;
 	}
