@@ -13,7 +13,7 @@ public class Validator {
 		System.out.println(fetchAfterAt("username@domain.com"));
 		System.out.println(isPrefix("you_!9850348me"));
 		System.out.println(isDomain("gmail.com"));
-		System.out.println(isDomain("g.ma-i-l.com"));
+		System.out.println(isDomain(".com"));
 
 		
 	}
@@ -97,7 +97,7 @@ public class Validator {
 	
 	// isDomain()
 	public static boolean isDomain(String domain) {
-		// Split the String into two parts
+		// Split the String into two portions separated by a period
 		String[] parts = domain.split("\\.");
 		if (parts.length < 2) {
 			return false;
@@ -111,12 +111,11 @@ public class Validator {
 
 		String part2 = parts[parts.length-1];
 		int length2 = part2.length();
+		System.out.println("length" + length1 + " " + length2);
 		
-		
-		// Made up of two portions separated by a period
 		// Second portion contains at least two characters
 		// First portion must start and end with an alphanumeric character
-		if ( length1==0 || length2 < 2 || !isAlphaNum(domain.charAt(0)) || !isAlphaNum(part1.charAt(length1-1))  ) {
+		if ( length2 < 2 || length1 == 0 || !isAlphaNum(domain.charAt(0)) || !isAlphaNum(part1.charAt(length1-1))  ) {
 			return false;
 		}
 					
