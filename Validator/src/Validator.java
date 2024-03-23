@@ -13,6 +13,8 @@ public class Validator {
 		System.out.println(fetchAfterAt("username@domain.com"));
 		System.out.println(isPrefix("you_!9850348me"));
 		System.out.println(isDomain("gmail.com"));
+		System.out.println(isDomain("g_ma-i-l.com"));
+
 		
 	}
 	
@@ -75,7 +77,7 @@ public class Validator {
 	
 	//isPrefix() to check if the start of a String is a valid email prefix
 	public static boolean isPrefix(String prefix) {
-		if (prefix.length()==0 || !isAlphaNum(prefix.charAt(0)) || isAlphaNum(prefix.charAt(prefix.length()-1))) {
+		if (prefix.length()==0 || !isAlphaNum(prefix.charAt(0)) || !isAlphaNum(prefix.charAt(prefix.length()-1))) {
 	        return false; // Empty prefix or first character is not alphanumeric
 	    }
 		
@@ -83,15 +85,12 @@ public class Validator {
 	    	 if (!isPrefixChar(prefix.charAt(i))) {
 	             return false; // Invalid character
 	         }
-	         
-	         if (isSpecialChar(prefix.charAt(i), true)) {
-	        	 // Special character not followed by alphanumeric character
-	        	 if (isSpecialChar(prefix.charAt(i), false) && !isAlphaNum(prefix.charAt(i + 1))) {
-	 			    return false;
-	 			}
-	         }
-	    }	    
-	    return true; // All characters passed validation		
+	    	// An underscore, period, or dash must always be followed by at least one alphanumeric characters
+	    	 if ( isSpecialChar(prefix.charAt(i),true) && !isAlphaNum(prefix.charAt(i + 1)) ) {
+	                return false; 
+	    	 }
+	    }
+		return true;
 	}
 	
 	
