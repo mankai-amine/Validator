@@ -13,8 +13,9 @@ public class Validator {
 		System.out.println(fetchAfterAt("username@domain.com"));
 		System.out.println(isPrefix("you_!9850348me"));
 		System.out.println(isDomain("gmail.com"));
-		System.out.println("email" + isEmail("user.name@fake-m.ail.com"));
-	
+		System.out.println("email?" + isEmail("user.name@fake-m.ail.com"));
+		System.out.println("username? "+isUsername("#sd99"));
+		System.out.println("password? "+safePassword("H3l10-WoRld"));
 		
 	}
 	
@@ -145,18 +146,88 @@ public class Validator {
 		return true;
 	}
 
-	// isEmail
-		public static boolean isEmail (String email) {
-			if (!singleAtSign(email)) {
-				return false;
-			}
-			String prefix = fetchBeforeAt(email);
-			String domain = fetchAfterAt(email);
-			if (!isPrefix(prefix) || !isDomain(domain)) {
-				return false;
-			}
-			return true;
+	// isEmail()
+	public static boolean isEmail (String email) {
+		if (!singleAtSign(email)) {
+			return false;
 		}
+		String prefix = fetchBeforeAt(email);
+		String domain = fetchAfterAt(email);
+		if (!isPrefix(prefix) || !isDomain(domain)) {
+			return false;
+		}
+		return true;
+	}
 	
 	
+	 // isUsername()
+	 public static String isUsername (String username) {
+		 
+		 // Contains seven or less characters
+		 // Start with a period, or dash
+		 // The last character is alphanumeric 
+		 if (username.length()>7 || !isSpecialChar(username.charAt(0), false ) || !isAlphaNum(username.charAt(username.length()-1)) ) {
+			 return "";
+		 }
+		 
+		 for (int i=0; i<username.length()-1;i++) {
+			 // Contains only alphanumeric characters, periods(.), or dashes(-)
+			 if (!isDomainChar(username.charAt(i))) {
+				 return "";
+			 }
+			 // A period, or dash must always be followed by at least one alphanumeric character
+			 if ( !isAlphaNum(username.charAt(i)) && !isAlphaNum(username.charAt(i+1)) ) {
+				 return "";
+		     }
+		 }
+		 return username.toLowerCase();
+	}
+	 
+	 // safePassword()
+	 public static boolean safePassword(String password) {
+		 
+		 // Contains a minimum 7 characters and maximum 15 characters.
+		 if (password.length()<7 || password.length()>15) {
+			 return false;
+		 }
+		 int countAlphaNum=0, countLowerCase=0, countUpperCase=0, countNumber=0, countSpecialChar=0;
+		 for (int i=0; i<password.length(); i++) {
+			 
+			 // The same character must never be repeated consecutively
+			 if ( i<password.length()-1 && password.charAt(i)==password.charAt(i+1) ){
+					 return false;
+				 } 
+			 
+			 // Contains at least one alphanumeric characters
+			 if (isAlphaNum(password.charAt(i))) {
+				 countAlphaNum++;
+			 }
+			 
+			 // /Contain at least one lower case letter
+			 if (Character.isLowerCase(password.charAt(i))){
+				 countLowerCase++;
+			 }
+			 
+			 // Contain at least one upper case letter
+			 if (Character.isUpperCase(password.charAt(i))){
+				 countUpperCase++;
+			 }
+			 
+			 // Contain at least one number
+			 if (Character.isDigit(password.charAt(i))){
+				 countNumber++;
+			 }
+			 
+			 // Contain at least one period, dash or underscore
+			 if (isSpecialChar(password.charAt(i), true)){
+				 countSpecialChar++;
+			 }
+		 }
+		 
+		 return countAlphaNum!=0 && countLowerCase!=0 && countUpperCase!=0 && countNumber!=0 && countSpecialChar!=0;
+		 
+	 }
+	 
+	 
+		
 }
