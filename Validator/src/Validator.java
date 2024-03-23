@@ -12,7 +12,8 @@ public class Validator {
 		System.out.println(fetchBeforeAt("username@domain.com"));
 		System.out.println(fetchAfterAt("username@domain.com"));
 		System.out.println(isPrefix("you_!9850348me"));
-		System.out.println(isDomain("833guiif_34"));
+		System.out.println(isDomain("gmail.com"));
+		
 	}
 	
 	// isAlphaNum() to check if a character is alphanumeric
@@ -52,7 +53,6 @@ public class Validator {
 	
 	//fetchBeforeAt() to get the beginning of an email address
 	public static String fetchBeforeAt(String email) {
-		String temp="";
 		int i=0;
 		for (i = 0; i < email.length(); i++) {
 			if (email.charAt(i)=='@') {
@@ -85,61 +85,55 @@ public class Validator {
 	         }
 	         
 	         if (isSpecialChar(prefix.charAt(i), true)) {
-	             if (!isNextCharacter(i, prefix)) {
-	                 return false; // Special character not followed by alphanumeric character
-	             }
+	        	 // Special character not followed by alphanumeric character
+	        	 if (isSpecialChar(prefix.charAt(i), false) && !isAlphaNum(prefix.charAt(i + 1))) {
+	 			    return false;
+	 			}
 	         }
 	    }	    
 	    return true; // All characters passed validation		
 	}
 	
-	public static boolean isNextCharacter(int i, String str) {
-		return ((i + 1)<str.length() && isAlphaNum(str.charAt(i + 1)));
-	}
 	
-	public static boolean isDomain(String domain) {	
-		if (domain.length() < 3) {
-			//domain should have at least two portions separated by a period, that is 3 characters
-			return false; 
-		}
-		int dot=domain.indexOf('.');//index of period character in a string domain 
-		if (dot<=0 || dot==domain.length()-1) {
-			// indexOf returns -1 when the character is not found
-			// if indexOf return 0, the first character in string is "."
+	
+	// isDomain()
+	public static boolean isDomain(String input) {
+		String[] parts = input.split("\\.");		
+		// Made up of two portions separated by a period
+		// Second portion contains at least two characters
+		// First portion must start and end with an alphanumeric character
+		if (parts.length != 2 || parts[0].length()==0 || parts[1].length() < 2 || !isAlphaNum(input.charAt(0)) || !isAlphaNum(parts[0].charAt(parts[0].length()-1))  ) {
 			return false;
 		}
-		String firstPortion=domain.substring(0,dot);
-		String secondPortion=domain.substring(dot+1);
+			
+		String part1 = parts[0], part2 = parts[1];
+		int length1 = part1.length(), length2 = part2.length();
 		
-		//check the first portion	
-		if (!isAlphaNum(firstPortion.charAt(0))){
-			return false; // First portion must start with an alphanumeric character
+		// The second portion contains only letters of the alphabet
+		int count=0;
+		for (int i=0; i<length2; i++) {
+			if (Character.isLetter(part2.charAt(i))) {
+				count++;
+			}
+		}
+		if (count != length2) {
+		return false;
 		}
 		
-		for (int i = 0; i < firstPortion.length(); i++) {
-	        char currentChar = firstPortion.charAt(i);
-	        if (!isDomainChar(currentChar)) {
-	            return false; // Invalid character in the first portion
-	        }
-
-	        if (isSpecialChar(currentChar, true)) {
-	            if (isNextCharacter(i,firstPortion)) {
-	                return false; // Period or dash in the first portion must be followed by one or more alphanumeric characters
-	            }
-	        }
-	    }
-
-	    // Check second portion
-	    if (secondPortion.length() < 2 ) {
-	        return false; // Second portion must have at least two characters and contain only letters of the alphabet
-	    } else {
-	    	for (int i = 0; i < secondPortion.length(); i++) {
-	    		if (!isAlphaNum(secondPortion.charAt(i))) return false;
-	    	}
-	    }
 		
+		for (int i=1; i<length1-1; i++) {
+			// First portion contains only alphanumeric characters, periods, and dashes.
+			if ( !isDomainChar (part1.charAt(i))) {
+				return false;
+			}
+			// A period or dash, in the first portion must be followed by one or more alphanumeric characters	
+			if (isSpecialChar(part1.charAt(i), false) && !isAlphaNum(part1.charAt(i + 1))) {
+			    return false;
+			}
+		}
 		return true;
 	}
+
 	
 	
 	
