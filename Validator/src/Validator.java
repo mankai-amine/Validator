@@ -13,7 +13,7 @@ public class Validator {
 		System.out.println(fetchAfterAt("username@domain.com"));
 		System.out.println(isPrefix("you_!9850348me"));
 		System.out.println(isDomain("gmail.com"));
-		System.out.println(isDomain("g_ma-i-l.com"));
+		System.out.println(isDomain("g.ma-i-l.com"));
 
 		
 	}
@@ -96,18 +96,30 @@ public class Validator {
 	
 	
 	// isDomain()
-	public static boolean isDomain(String input) {
-		String[] parts = input.split("\\.");		
+	public static boolean isDomain(String domain) {
+		// Split the String into two parts
+		String[] parts = domain.split("\\.");
+		if (parts.length < 2) {
+			return false;
+		}
+		
+		String part1 = "";
+		for (int i=0; i < parts.length-1;i++) {
+			part1 += parts[i];
+		}
+		int length1 = part1.length();
+
+		String part2 = parts[parts.length-1];
+		int length2 = part2.length();
+		
+		
 		// Made up of two portions separated by a period
 		// Second portion contains at least two characters
 		// First portion must start and end with an alphanumeric character
-		if (parts.length != 2 || parts[0].length()==0 || parts[1].length() < 2 || !isAlphaNum(input.charAt(0)) || !isAlphaNum(parts[0].charAt(parts[0].length()-1))  ) {
+		if ( length1==0 || length2 < 2 || !isAlphaNum(domain.charAt(0)) || !isAlphaNum(part1.charAt(length1-1))  ) {
 			return false;
 		}
-			
-		String part1 = parts[0], part2 = parts[1];
-		int length1 = part1.length(), length2 = part2.length();
-		
+					
 		// The second portion contains only letters of the alphabet
 		int count=0;
 		for (int i=0; i<length2; i++) {
