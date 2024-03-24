@@ -1,5 +1,6 @@
 
 // 2482903 Mohamed Amine Mankai   &  2457647 Iana Setrakova
+import java.util.Arrays;
 
 public class Validator {
 
@@ -16,7 +17,9 @@ public class Validator {
 		System.out.println("email?" + isEmail("user.name@fake-m.ail.com"));
 		System.out.println("username? "+isUsername("#sd99"));
 		System.out.println("password? "+safePassword("H3l10-WoRld"));
-		
+		System.out.println(Arrays.toString(validEmails(new String[] {"a@gmail.com", "@yahoo.fr","b@msn.com"} )));
+		System.out.println(Arrays.toString(validUsernames(new String[] {"-User2", ".cc123","userName"} )));
+		System.out.println(Arrays.toString(validPasswords(new String[] {"H3l10-WoRld", "1nn3r-T1m3","W0w.Pr0ject"} )));
 	}
 	
 	// isAlphaNum() to check if a character is alphanumeric
@@ -78,13 +81,16 @@ public class Validator {
 	
 	//isPrefix() to check if the start of a String is a valid email prefix
 	public static boolean isPrefix(String prefix) {
+		// Contains at least one character
+		// First and last characters are alphanumeric.
 		if (prefix.length()==0 || !isAlphaNum(prefix.charAt(0)) || !isAlphaNum(prefix.charAt(prefix.length()-1))) {
 	        return false; // Empty prefix or first character is not alphanumeric
 	    }
 		
 	    for (int i=1; i<prefix.length()-1; i++) {
+	    	// Contains only alphanumeric characters, underscores (_), periods (.), and dashes (-).
 	    	 if (!isPrefixChar(prefix.charAt(i))) {
-	             return false; // Invalid character
+	             return false; 
 	         }
 	    	// An underscore, period, or dash must always be followed by at least one alphanumeric characters
 	    	 if ( isSpecialChar(prefix.charAt(i),true) && !isAlphaNum(prefix.charAt(i + 1)) ) {
@@ -224,10 +230,72 @@ public class Validator {
 			 }
 		 }
 		 
-		 return countAlphaNum!=0 && countLowerCase!=0 && countUpperCase!=0 && countNumber!=0 && countSpecialChar!=0;
-		 
+		 return countAlphaNum!=0 && countLowerCase!=0 && countUpperCase!=0 && countNumber!=0 && countSpecialChar!=0; 
 	 }
 	 
+	// validEmails()
+	public static String[] validEmails (String[] emails) {
+		int countValid=0; 
+		for (int i=0; i<emails.length; i++) {
+			 if (isEmail(emails[i])) {
+				 countValid++;
+			 } else {
+				 emails[i]="";
+			 }  
+		 }
+		
+		String[] valEmails = new String[countValid];
+		int index=0;
+		for (int i=0; i<emails.length; i++) {
+			if (!emails[i].equals("")) {
+				valEmails[index]=emails[i];
+				index++;
+			}
+		}
+		return valEmails;
+	}
+	
+	// validUsernames()
+	public static String[] validUsernames(String[] usernames) {
+		int countValid=0;		
+		for(String username : usernames){
+			if (!isUsername(username).equals("")) {
+				countValid++;
+			}
+		}
+		
+		String[] valUsernames= new String[countValid];
+		int index=0;
+		for (int i=0;i<usernames.length;i++)  {
+			if (!isUsername(usernames[i]).equals("")) {
+				valUsernames[index]=usernames[i];
+				index++;
+			}
+		}
+		return valUsernames;
+	}
+		
+	// validPasswords()
+	public static String[] validPasswords (String[] passwords) {
+		int countValid=0; 
+		for (int i=0; i<passwords.length; i++) {
+			 if (safePassword(passwords[i])) {
+				 countValid++;
+			 } else {
+				 passwords[i]="";
+			 }  
+		 }
+		
+		String[] valPasswords = new String[countValid];
+		int index=0;
+		for (int i=0; i<passwords.length; i++) {
+			if (!passwords[i].equals("")) {
+				valPasswords[index]=passwords[i];
+				index++;
+			}
+		}
+		return valPasswords;
+	}
 	 
 		
 }
